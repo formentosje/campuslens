@@ -1,0 +1,1914 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>CampusLens</title>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&amp;family=Poppins:wght@500;600;700&amp;display=swap"
+    />
+    <style>
+      :root {
+        color-scheme: light;
+        --brand: #c8102e;
+        --brand-dark: #9e0b23;
+        --ink: #1f2937;
+        --mute: #6b7280;
+        --bg: #f4f4f5;
+        --card: #ffffff;
+        --line: #e5e7eb;
+        --bar: #4b5563;
+        --bar-soft: #d1d5db;
+        --good: #166534;
+        --good-bg: #dcfce7;
+        --watch: #92400e;
+        --watch-bg: #fef3c7;
+        --action: #b42318;
+        --action-bg: #fee4e2;
+        --table-hover: #f9fafb;
+        --selected: #fff5f5;
+        --white-muted: rgb(255 255 255 / 0.85);
+        --shadow:
+          0 1px 2px rgb(16 24 40 / 0.06), 0 4px 12px rgb(16 24 40 / 0.04);
+        --scrim: rgb(17 24 39 / 0.55);
+        --heading-font: Poppins, "Segoe UI", system-ui, Arial, sans-serif;
+        --body-font: "Open Sans", "Segoe UI", system-ui, Arial, sans-serif;
+        --band: linear-gradient(110deg, var(--brand), var(--brand-dark));
+      }
+      [hidden] {
+        display: none !important;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font: 14px/1.5 var(--body-font);
+      }
+      .shell {
+        width: 100%;
+        margin: 0;
+        padding: 0 8px 24px;
+      }
+      .top,
+      .identity,
+      .filters {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+      .top {
+        justify-content: space-between;
+        flex-wrap: wrap;
+        padding-block: 16px;
+        margin-bottom: 24px;
+        color: var(--card);
+        border-image: var(--band) fill 0 / 0 / 0 100vmax;
+      }
+      .top .identity {
+        flex: 1 1 360px;
+        min-width: 0;
+      }
+      .logo {
+        flex: none;
+        color: currentColor;
+      }
+      h1,
+      h2,
+      p {
+        margin: 0;
+      }
+      h1,
+      h2,
+      .value {
+        font-family: var(--heading-font);
+      }
+      h1 {
+        font-size: 22px;
+        line-height: 1.2;
+        font-weight: 700;
+      }
+      .subtitle,
+      footer {
+        color: var(--mute);
+        font-size: 12px;
+      }
+      .subtitle {
+        margin-top: 4px;
+      }
+      .top .subtitle {
+        color: var(--white-muted);
+      }
+      .filters {
+        flex-wrap: wrap;
+      }
+      label {
+        display: grid;
+        gap: 4px;
+        font-size: 12px;
+        font-weight: 600;
+      }
+      select,
+      button {
+        max-width: 100%;
+        padding: 8px 12px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--card);
+        color: var(--ink);
+        font: inherit;
+        transition:
+          background-color 150ms,
+          border-color 150ms,
+          color 150ms,
+          box-shadow 150ms;
+      }
+      select {
+        border-color: transparent;
+      }
+      :is(select, button, [tabindex]):focus-visible {
+        outline: 2px solid var(--ink);
+        outline-offset: 2px;
+      }
+      .top :is(select, button, [tabindex]):focus-visible {
+        outline-color: var(--card);
+        box-shadow: 0 0 0 2px var(--brand-dark);
+      }
+      button {
+        cursor: pointer;
+        font: 600 12px/1.5 var(--heading-font);
+      }
+      button:disabled {
+        opacity: 0.55;
+        cursor: default;
+      }
+      .primary {
+        background: var(--brand);
+        border-color: var(--brand);
+        color: var(--card);
+        border-radius: 10px;
+        padding: 12px;
+      }
+      .primary:hover {
+        background: var(--brand-dark);
+        border-color: var(--brand-dark);
+      }
+      .header-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-self: end;
+      }
+      .header-actions button {
+        background: transparent;
+        border: 1.5px solid var(--card);
+        color: var(--card);
+      }
+      .header-actions button:hover {
+        background: var(--card);
+        color: var(--brand-dark);
+      }
+      .sign-in {
+        min-height: 100vh;
+        display: grid;
+        align-content: center;
+        justify-items: center;
+        gap: 16px;
+        padding: 24px;
+        border-top: 6px solid color-mix(in srgb, var(--brand) 25%, transparent);
+        background: linear-gradient(135deg, #f8fafc, var(--selected));
+      }
+      .sign-in .card {
+        display: grid;
+        grid-template-columns: 1.05fr 1fr;
+        width: min(100%, 960px);
+        padding: 12px;
+        border-radius: 20px;
+        box-shadow: 0 20px 50px rgb(16 24 40 / 0.1);
+      }
+      .sign-in-message,
+      .sign-in-entry {
+        min-width: 0;
+        padding: 40px;
+      }
+      .sign-in-message {
+        position: relative;
+        isolation: isolate;
+        overflow: hidden;
+        border-radius: 12px;
+        background: linear-gradient(160deg, var(--ink), #111827);
+        color: var(--card);
+      }
+      .sign-in-message::before,
+      .sign-in-message::after {
+        content: "";
+        position: absolute;
+        z-index: -1;
+        pointer-events: none;
+      }
+      .sign-in-message::before {
+        right: 0;
+        bottom: 0;
+        width: 180px;
+        height: 180px;
+        background: radial-gradient(
+            circle,
+            rgb(255 255 255 / 0.08) 1px,
+            transparent 2px
+          )
+          0 0 / 16px 16px;
+        mask-image: linear-gradient(135deg, transparent, var(--ink));
+      }
+      .sign-in-message::after {
+        right: -85px;
+        bottom: -90px;
+        width: 220px;
+        height: 220px;
+        border: 2px solid var(--brand);
+        border-radius: 50%;
+        opacity: 0.35;
+      }
+      .sign-in .identity {
+        font: 700 22px/1.2 var(--heading-font);
+      }
+      .sign-in .logo {
+        width: 56px;
+        height: 56px;
+        object-fit: contain;
+      }
+      .sign-in h1 {
+        margin-top: 24px;
+        font-size: 30px;
+      }
+      .sign-in h1 span {
+        text-decoration: underline 3px var(--brand);
+        text-underline-offset: 4px;
+      }
+      .sign-in-summary {
+        margin-top: 16px;
+        color: rgb(255 255 255 / 0.8);
+        font-size: 15px;
+      }
+      .sign-in-benefits {
+        display: grid;
+        gap: 10px;
+        margin: 24px 0 0;
+        padding: 0;
+        list-style: none;
+        color: rgb(255 255 255 / 0.9);
+      }
+      .sign-in-benefits li {
+        display: flex;
+        align-items: baseline;
+        gap: 10px;
+      }
+      .sign-in-benefits li::before {
+        content: "";
+        flex: 0 0 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--brand);
+      }
+      .sign-in-entry {
+        display: grid;
+        place-items: center;
+      }
+      .sign-in-entry-content {
+        width: 100%;
+        max-width: 400px;
+      }
+      .sign-in-eyebrow {
+        color: var(--brand);
+        font: 600 12px/1.5 var(--heading-font);
+        letter-spacing: 0.08em;
+      }
+      .sign-in-entry h2 {
+        margin-top: 4px;
+        font-size: 26px;
+        font-weight: 700;
+      }
+      .sign-in-description {
+        margin-top: 8px;
+        color: var(--mute);
+      }
+      .sign-in-role {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 16px;
+        border: 1px solid var(--line);
+        border-left: 4px solid var(--brand);
+        border-radius: 12px;
+        background: var(--table-hover);
+        font-size: 13px;
+      }
+      .sign-in-avatar {
+        flex: none;
+        padding: 8px;
+        border-radius: 50%;
+        background: var(--card);
+        color: var(--mute);
+      }
+      .sign-in-role h3 {
+        margin: 0;
+        font: 600 16px/1.5 var(--heading-font);
+      }
+      .sign-in form {
+        margin-top: 24px;
+      }
+      .sign-in .primary {
+        width: 100%;
+        margin-top: 16px;
+        padding: 14px;
+        transition:
+          background-color 150ms,
+          transform 150ms,
+          box-shadow 150ms;
+      }
+      .sign-in .primary:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow);
+      }
+      .sign-in .primary:focus-visible {
+        outline-offset: 3px;
+      }
+      .sign-in-access {
+        display: flex;
+        align-items: flex-start;
+        gap: 6px;
+        margin-top: 8px;
+      }
+      .sign-in-access svg {
+        flex: none;
+        margin-top: 2px;
+      }
+      .sign-in-campus {
+        margin-top: 24px;
+      }
+      .sign-in-note {
+        max-width: 960px;
+        margin: 0;
+        text-align: center;
+        color: var(--bar);
+      }
+      @media (max-width: 819px) {
+        .sign-in {
+          padding: 16px;
+        }
+        .sign-in .card {
+          grid-template-columns: 1fr;
+        }
+        .sign-in-message,
+        .sign-in-entry {
+          padding: 24px;
+        }
+        .sign-in h1 {
+          font-size: 24px;
+        }
+        .sign-in-message::before,
+        .sign-in-message::after {
+          display: none;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .sign-in .primary:hover {
+          transform: none;
+        }
+      }
+      .bar-button {
+        width: 100%;
+        text-align: left;
+        padding: 4px 8px 8px;
+        font: inherit;
+        border-color: transparent;
+      }
+      .bar-button[aria-pressed="true"] {
+        box-shadow: inset 0 0 0 2px var(--ink);
+      }
+      .bar-button[aria-pressed="true"] .bar-label {
+        font-weight: 600;
+      }
+      .bar-button:hover .bar-fill {
+        filter: brightness(0.88);
+      }
+      .table-scroll {
+        overflow-x: auto;
+        margin-top: 8px;
+        padding: 2px 2px 4px;
+      }
+      .status-table {
+        border-collapse: collapse;
+        width: 100%;
+        font-size: 12px;
+        text-align: center;
+      }
+      .status-table :is(th, td) {
+        padding: 12px;
+        border-bottom: 1px solid var(--line);
+      }
+      .status-table thead th {
+        background: var(--table-hover);
+        color: var(--mute);
+        text-transform: uppercase;
+        font-weight: 600;
+        line-height: 1.25;
+      }
+      .status-table tbody tr {
+        cursor: pointer;
+      }
+      .status-table tbody tr:hover {
+        background: var(--table-hover);
+      }
+      .status-table tbody tr.selected {
+        background: var(--selected);
+      }
+      .status-table tbody th {
+        border-left: 3px solid transparent;
+        white-space: nowrap;
+      }
+      .status-table tbody tr.selected th {
+        border-left-color: var(--brand);
+      }
+      .status-table td {
+        white-space: nowrap;
+      }
+      .status-table .cell-status {
+        display: inline-block;
+        border-radius: 8px;
+        padding: 3px 6px;
+        font-weight: 600;
+      }
+      .status-table button {
+        font: 600 12px/1.5 var(--body-font);
+        padding: 0;
+        background: transparent;
+        border: 0;
+        white-space: nowrap;
+      }
+      .courses-heading {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        gap: 8px;
+      }
+      .course-bars {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        column-gap: 16px;
+      }
+      .tour {
+        position: fixed;
+        inset: 0;
+        z-index: 10;
+        overflow: hidden;
+      }
+      .spotlight {
+        position: absolute;
+        border-radius: 12px;
+        box-shadow:
+          0 0 0 3px var(--card),
+          0 0 0 200vmax var(--scrim);
+      }
+      .tour-tip {
+        position: absolute;
+        width: min(350px, calc(100% - 24px));
+        max-height: calc(100% - 24px);
+        overflow: auto;
+      }
+      .tour-tip p {
+        margin-top: 8px;
+      }
+      .tour-buttons {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 16px;
+      }
+      #tour-back {
+        border-color: var(--ink);
+      }
+      #tour-skip {
+        border-color: transparent;
+        color: var(--mute);
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+      main {
+        display: grid;
+        gap: 24px;
+      }
+      .kpis,
+      .charts,
+      .details {
+        display: grid;
+        gap: 16px;
+      }
+      .kpis {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+      }
+      .charts {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.55fr);
+        align-items: start;
+      }
+      .details {
+        grid-template-columns: 1fr;
+      }
+      .card {
+        min-width: 0;
+        padding: 20px;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: var(--card);
+        box-shadow: var(--shadow);
+      }
+      .card h2 {
+        font-size: 15px;
+        line-height: 1.35;
+        font-weight: 600;
+      }
+      .metric {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        border-top: 3px solid var(--status-ink);
+      }
+      .metric h2 {
+        flex: 1;
+        font: 600 12px/1.5 var(--body-font);
+        color: var(--mute);
+        letter-spacing: 0.03em;
+        text-transform: uppercase;
+      }
+      .value {
+        font-size: 34px;
+        line-height: 1.1;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+      .unit {
+        color: var(--mute);
+        font-size: 14px;
+        font-weight: 600;
+      }
+      .target,
+      .delta,
+      .chart-note {
+        color: var(--mute);
+        font-size: 12px;
+      }
+      .value,
+      .delta,
+      .bar-value {
+        font-variant-numeric: tabular-nums;
+      }
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 2px 8px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+      .good,
+      [data-status="good"] {
+        --status-ink: var(--good);
+        --status-bg: var(--good-bg);
+      }
+      .watch,
+      [data-status="watch"] {
+        --status-ink: var(--watch);
+        --status-bg: var(--watch-bg);
+      }
+      .action,
+      [data-status="action"] {
+        --status-ink: var(--action);
+        --status-bg: var(--action-bg);
+      }
+      :is(.badge, .cell-status) {
+        color: var(--status-ink);
+        background: var(--status-bg);
+      }
+      .chart-note {
+        margin-top: 4px;
+      }
+      .trend {
+        display: block;
+        width: 100%;
+        max-height: 214px;
+        margin-top: 8px;
+      }
+      .trend text {
+        fill: var(--mute);
+        font: 11px var(--body-font);
+      }
+      .trend .point-label {
+        fill: var(--ink);
+        font-weight: 600;
+      }
+      .grid-line {
+        stroke: var(--line);
+      }
+      .target-line {
+        stroke: var(--mute);
+        stroke-dasharray: 5 4;
+      }
+      .series {
+        fill: none;
+        stroke: var(--bar);
+        stroke-width: 2.5;
+      }
+      .point {
+        fill: var(--bar);
+        stroke: var(--bar);
+        stroke-width: 2.5;
+      }
+      .point.selected {
+        fill: var(--card);
+        stroke: var(--ink);
+      }
+      .bars {
+        display: grid;
+        gap: 8px;
+        margin-top: 8px;
+      }
+      .bar-label {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        font-size: 12px;
+      }
+      .bar-value {
+        font-weight: 600;
+        white-space: nowrap;
+      }
+      .bar-track {
+        display: block;
+        position: relative;
+        height: 18px;
+        margin-top: 14px;
+        border-radius: 6px;
+        background: var(--bar-soft);
+      }
+      .bar-fill {
+        display: block;
+        height: 100%;
+        border-radius: inherit;
+        background: var(--bar);
+        transition: filter 150ms;
+      }
+      .bar-fill.low {
+        background: var(--action);
+      }
+      .marker {
+        position: absolute;
+        top: -1px;
+        bottom: -1px;
+        width: 2px;
+        background: var(--ink);
+      }
+      .marker::before {
+        content: attr(data-label);
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 10px;
+        color: var(--ink);
+        white-space: nowrap;
+      }
+      .alerts,
+      .privacy {
+        margin: 8px 0 0;
+        font-size: 13px;
+      }
+      .alerts {
+        list-style: none;
+        padding: 0;
+      }
+      .alerts li {
+        border-left: 4px solid var(--status-ink);
+        border-radius: 10px;
+        padding: 12px;
+        background: var(--status-bg);
+      }
+      .alerts li + li {
+        margin-top: 8px;
+      }
+      .alert-heading {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px 8px;
+        align-items: center;
+      }
+      .alerts strong,
+      .alert-status-icon {
+        color: var(--status-ink);
+      }
+      .alert-status-icon {
+        margin-right: 4px;
+      }
+      .alerts .badge {
+        border: 1px solid currentColor;
+      }
+      .alert-message {
+        color: var(--ink);
+        margin-top: 2px;
+      }
+      #privacy-card h2 {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+      .privacy-icon {
+        flex: none;
+        color: var(--mute);
+      }
+      .privacy {
+        padding-left: 19px;
+        color: var(--ink);
+      }
+      .privacy li + li {
+        margin-top: 6px;
+      }
+      footer {
+        margin-top: 16px;
+        color: var(--bar);
+      }
+      @media (max-width: 979px) {
+        .kpis {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+        .charts,
+        .details {
+          grid-template-columns: 1fr;
+        }
+      }
+      @media (max-width: 479px) {
+        .shell {
+          padding-inline: 8px;
+        }
+        .kpis,
+        .course-bars {
+          grid-template-columns: 1fr;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          transition: none !important;
+        }
+      }
+      @page {
+        size: 13in 8.5in;
+        margin: 0.3in;
+      }
+      @media print {
+        :root {
+          --bg: var(--card);
+        }
+        body {
+          font-size: 9pt;
+          line-height: 1.3;
+          -webkit-print-color-adjust: exact;
+          print-color-adjust: exact;
+        }
+        .shell {
+          max-width: none;
+          padding: 0;
+        }
+        .top {
+          background: var(--band);
+          border-image: none;
+          padding: 8px;
+          margin-bottom: 8px;
+        }
+        main,
+        .kpis,
+        .charts,
+        .details {
+          gap: 8px;
+        }
+        .kpis {
+          grid-template-columns: repeat(5, minmax(0, 1fr));
+        }
+        .charts {
+          grid-template-columns: 1fr 1fr 1.55fr;
+        }
+        .details {
+          grid-template-columns: 1fr;
+        }
+        .card {
+          padding: 8px;
+          break-inside: avoid;
+          box-shadow: none;
+        }
+        .card h2 {
+          font-size: 10pt;
+        }
+        .metric h2 {
+          font-size: 8pt;
+        }
+        .metric {
+          gap: 4px;
+        }
+        h1 {
+          font-size: 16pt;
+        }
+        .value {
+          font-size: 18pt;
+        }
+        .trend {
+          height: 140px;
+        }
+        .bars {
+          gap: 4px;
+        }
+        .alerts,
+        .privacy,
+        .subtitle,
+        footer {
+          font-size: 8pt;
+        }
+        .alerts li {
+          padding: 4px 6px;
+        }
+        .alerts li + li {
+          margin-top: 4px;
+        }
+        footer {
+          margin-top: 8px;
+        }
+        .sign-in,
+        .tour,
+        .header-actions,
+        #back-to-all {
+          display: none !important;
+        }
+        #dashboard[hidden] {
+          display: block !important;
+        }
+        #dashboard:has(#course-card:not([hidden])) {
+          zoom: 0.85;
+        }
+        .bar-button {
+          padding: 2px 5px;
+        }
+        .bar-track {
+          height: 7px;
+          margin-top: 10px;
+        }
+        .marker::before {
+          font-size: 7px;
+        }
+        .course-bars {
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+        .alert-heading .badge {
+          padding-block: 0;
+          font-size: 8pt;
+        }
+        .alert-message {
+          margin-top: 0;
+        }
+        .table-scroll {
+          overflow: visible;
+          padding: 0;
+        }
+        .status-table {
+          font-size: 7pt;
+        }
+        .status-table :is(th, td),
+        .status-table button,
+        .status-table .cell-status {
+          padding: 2px;
+          font-size: inherit;
+        }
+      }
+      .help-button {
+        display: inline-grid;
+        place-items: center;
+        width: 20px;
+        height: 20px;
+        padding: 0;
+        margin-left: 5px;
+        border-radius: 50%;
+        color: var(--mute);
+        font: 600 12px var(--body-font);
+        vertical-align: middle;
+      }
+      .help-tooltip {
+        position: fixed;
+        z-index: 20;
+        max-width: min(320px, calc(100vw - 24px));
+        padding: 10px 12px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--card);
+        color: var(--ink);
+        box-shadow: var(--shadow);
+        font: 13px/1.5 var(--body-font);
+      }
+      @media print {
+        .help-button, .help-tooltip { display: none !important; }
+      }
+      .charts { grid-template-columns: 1fr 1fr; gap: 24px; align-items: stretch; }
+      #year-chart, #trend-card { display: flex; flex-direction: column; }
+      #trend { position: relative; flex: 1; min-height: 300px; margin-top: 8px; }
+      #trend .trend { position: absolute; inset: 0; width: 100%; height: 100%; max-height: none; margin: 0; }
+      #year-bars { flex: 1; display: flex; flex-direction: column; justify-content: space-between; padding-block: 8px; }
+      #status-card .status-table { table-layout: fixed; width: 100%; }
+      @media screen and (max-width: 979px) {
+        .charts { grid-template-columns: 1fr; grid-auto-rows: 1fr; }
+        #trend { min-height: 260px; }
+        #year-bars { min-height: 268px; }
+      }
+      @media screen and (max-width: 819px) {
+        #status-card .status-table { min-width: 600px; }
+      }
+      @media print {
+        .charts { grid-template-columns: 1fr 1fr; gap: 8px; }
+        #trend { min-height: 95px; }
+        #year-bars { min-height: 95px; padding-block: 0; gap: 0; }
+        .card { padding: 5px; }
+        .status-table :is(th, td) { padding: 1px 2px; }
+        #dashboard { zoom: .8; }
+        #dashboard:has(#course-card:not([hidden])) { zoom: .72; }
+      }
+      .trend-hover { fill: transparent; cursor: help; }
+      .trend-hover:focus-visible { outline: none; stroke: var(--ink); stroke-width: 1.5; }
+      #trend .point, #trend .point-label { pointer-events: none; }
+    </style>
+  </head>
+  <body>
+    <svg width="0" height="0" style="position: absolute" aria-hidden="true">
+      <defs>
+        <g id="campuslens-logo">
+          <circle
+            cx="22"
+            cy="22"
+            r="16"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="3"
+          />
+          <path
+            d="M34 34l11 11"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="4"
+            stroke-linecap="round"
+          />
+          <path
+            d="M13 29v-5h4v5zm7 0v-9h4v9zm7 0V16h4v13z"
+            fill="currentColor"
+          />
+        </g>
+      </defs>
+    </svg>
+    <section
+      class="sign-in"
+      id="sign-in"
+      role="dialog"
+      aria-modal="true"
+      aria-label="CampusLens sign-in"
+    >
+      <div class="card">
+        <div class="sign-in-message">
+          <div class="identity">
+            <img
+              class="logo"
+              id="brandLogo"
+              src="logo.png"
+              alt="CampusLens logo"
+              width="56"
+              height="56"
+              onerror="
+                this.hidden = true;
+                this.nextElementSibling.hidden = false;
+              "
+            />
+            <svg
+              class="logo"
+              width="56"
+              height="56"
+              viewBox="0 0 52 52"
+              aria-hidden="true"
+              hidden
+            >
+              <use href="#campuslens-logo" />
+            </svg>
+            <span>CampusLens</span>
+          </div>
+          <h1>
+            See your college clearly, then <span>decide with confidence</span>.
+          </h1>
+          <p class="sign-in-summary">
+            One view of academic performance, teaching quality, and student
+            retention for the College of Informatics and Computing Sciences.
+          </p>
+          <ul class="sign-in-benefits">
+            <li>Academic performance monitoring</li>
+            <li>Teaching feedback (SETE) shown in context</li>
+            <li>Retention and year-level comparison</li>
+            <li>Early warnings with suggested actions</li>
+          </ul>
+        </div>
+        <div class="sign-in-entry">
+          <div class="sign-in-entry-content">
+            <p class="sign-in-eyebrow">DEAN ACCESS</p>
+            <h2>Welcome back</h2>
+            <p class="sign-in-description">
+              A centralized analytics view that connects Student and Faculty
+              Portal records with SETE results.
+            </p>
+            <form id="sign-in-form">
+              <div class="sign-in-role">
+                <svg
+                  class="sign-in-avatar"
+                  width="36"
+                  height="36"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  aria-hidden="true"
+                >
+                  <circle cx="12" cy="7" r="4" />
+                  <path
+                    d="M4 21v-2a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v2z"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+                <div>
+                  <h3>Dean</h3>
+                  <p>College of Informatics and Computing Sciences (CICS)</p>
+                  <p class="subtitle">
+                    College-level dashboard · year-level comparison · faculty
+                    details hidden
+                  </p>
+                </div>
+              </div>
+              <button class="primary" id="continue" type="submit" autofocus>
+                Enter dashboard →
+              </button>
+            </form>
+            <p class="subtitle sign-in-access">
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 16 16"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                aria-hidden="true"
+              >
+                <rect x="3" y="7" width="10" height="7" rx="1.5" />
+                <path d="M5 7V5a3 3 0 0 1 6 0v2" />
+              </svg>
+              Access is limited to the Dean and authorized college officers.
+            </p>
+            <p class="subtitle sign-in-campus">
+              Batangas State University, Nasugbu Campus
+            </p>
+          </div>
+        </div>
+      </div>
+      <p class="subtitle sign-in-note">
+        Demo screen only. No real login is used. Sample data: Student and
+        Faculty Portal and SETE records are generated sample records.
+      </p>
+    </section>
+    <div class="shell" id="dashboard" hidden>
+      <header class="top">
+        <div class="identity">
+          <svg
+            class="logo"
+            width="52"
+            height="52"
+            viewBox="0 0 52 52"
+            aria-hidden="true"
+          >
+            <use href="#campuslens-logo" />
+          </svg>
+          <div>
+            <h1 id="dashboard-title" tabindex="-1">CampusLens</h1>
+            <p class="subtitle">Dean's dashboard ·</p>
+          </div>
+          College of Informatics and Computing Sciences (CICS)
+        </div>
+        <div class="filters" id="filters">
+          <label
+            >Semester
+            <select id="semester"></select
+          ></label>
+          <label
+            >Year level
+            <select id="year-level"></select
+          ></label>
+        </div>
+        <div class="header-actions">
+          <button type="button" id="take-tour">Take a tour</button>
+          <button type="button" id="sign-out">Sign out</button>
+        </div>
+      </header>
+
+      <main>
+        <section
+          class="kpis"
+          id="kpis"
+          aria-label="Key performance indicators"
+        ></section>
+          <article class="card" id="status-card">
+            <h2 id="status-heading">Status by year level</h2>
+            <div
+              class="table-scroll"
+              role="region"
+              aria-labelledby="status-heading"
+              tabindex="0"
+            >
+              <table
+                class="status-table"
+                id="status-table"
+                aria-labelledby="status-heading"
+              ></table>
+            </div>
+          </article>
+        <section class="charts" aria-label="Charts">
+          <article class="card" id="year-chart">
+            <h2>Pass rate by year level</h2>
+            <p class="chart-note" id="pass-note"></p>
+            <div class="bars" id="year-bars"></div>
+          </article>
+          <article class="card" id="trend-card">
+            <h2>SETE trend across semesters</h2>
+            <p class="chart-note" id="trend-note"></p>
+            <div id="trend"></div>
+          </article>
+        </section>
+        <section class="card" id="course-card" hidden>
+          <div class="courses-heading">
+            <h2>Courses to review</h2>
+            <button type="button" id="back-to-all">
+              Back to all year levels
+            </button>
+          </div>
+          <p class="chart-note" id="courses-note"></p>
+          <div class="bars course-bars" id="courses"></div>
+        </section>
+        <div class="details">
+          <section class="card" id="alerts-card">
+            <h2>Alerts and suggested actions</h2>
+            <div id="alerts" aria-live="polite"></div>
+          </section>
+        </div>
+      </main>
+      <footer>
+        Data source: Student and Faculty Portal joined with SETE. The
+        integration is a proposed enhancement. All figures are sample data.
+      </footer>
+    </div>
+    <div class="tour" id="tour" hidden>
+      <div class="spotlight" id="spotlight" aria-hidden="true"></div>
+      <section
+        class="card tour-tip"
+        id="tour-tip"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="tour-title"
+        aria-describedby="tour-message tour-progress"
+        tabindex="-1"
+      >
+        <h2 id="tour-title"></h2>
+        <p id="tour-message"></p>
+        <p class="subtitle" id="tour-progress"></p>
+        <div class="tour-buttons">
+          <button type="button" id="tour-back">Back</button>
+          <button type="button" class="primary" id="tour-next">Next</button>
+          <button type="button" id="tour-skip">Skip tour</button>
+        </div>
+      </section>
+    </div>
+    <script>
+      const SAMPLE_DATA = {
+        1: {
+          name: "1st year",
+          pass: [84, 83, 82, 80],
+          retention: [93, 92, 91, 90],
+          sete: [4.3, 4.3, 4.2, 4.2],
+          resp: [66, 64, 62, 60],
+          fill: [90, 91, 92, 94],
+          courses: { "IT 101": 90, "IT 102": 82, "IT 103": 78 },
+        },
+        2: {
+          name: "2nd year",
+          pass: [86, 85, 84, 82],
+          retention: [92, 91, 90, 88],
+          sete: [4.2, 4.2, 4.1, 4.1],
+          resp: [62, 60, 58, 55],
+          fill: [88, 89, 90, 91],
+          courses: { "IT 201": 85, "IT 202": 79, "IT 203": 76 },
+        },
+        3: {
+          name: "3rd year",
+          pass: [82, 80, 78, 75],
+          retention: [90, 88, 86, 83],
+          sete: [4.1, 4.0, 3.9, 3.8],
+          resp: [58, 55, 52, 48],
+          fill: [84, 85, 87, 88],
+          courses: { "IT 301": 74, "IT 302": 71, "IT 303": 80, "IT 304": 77 },
+        },
+        4: {
+          name: "4th year",
+          pass: [90, 90, 91, 91],
+          retention: [96, 96, 95, 95],
+          sete: [4.4, 4.4, 4.4, 4.3],
+          resp: [70, 69, 68, 66],
+          fill: [78, 79, 80, 81],
+          courses: { "IT 401": 92, "IT 402": 89, "IT 403": 86 },
+        },
+      };
+      const SEMESTERS = [
+        "1st Sem 2024-25",
+        "2nd Sem 2024-25",
+        "1st Sem 2025-26",
+        "2nd Sem 2025-26",
+      ];
+      const SEMESTER_TICKS = [
+        "1st 24–25",
+        "2nd 24–25",
+        "1st 25–26",
+        "2nd 25–26",
+      ];
+      const KPI_RULES = {
+        pass: {
+          name: "College pass rate",
+          heading: "Pass rate",
+          target: [85, Infinity],
+          watch: [80, Infinity],
+          action:
+            "Fund tutoring or review sessions for the affected year level and ask the program coordinator for an improvement plan.",
+        },
+        retention: {
+          name: "Retention rate",
+          heading: "Retention",
+          target: [90, Infinity],
+          watch: [85, Infinity],
+          definition:
+            "Students who re-enrolled next semester ÷ students enrolled × 100.",
+          action:
+            "Meet with advisers to find why students leave and arrange support services.",
+        },
+        sete: {
+          name: "Average SETE score",
+          heading: "Avg. SETE",
+          target: [4.2, Infinity],
+          watch: [3.8, Infinity],
+          action:
+            "Schedule faculty development activities. Check other evidence before any decision.",
+        },
+        resp: {
+          name: "SETE response rate",
+          heading: "SETE response",
+          target: [60, Infinity],
+          watch: [50, Infinity],
+          action:
+            "Ask the program to extend the evaluation window. Treat SETE scores with caution until responses improve.",
+        },
+        fill: {
+          name: "Section fill rate",
+          heading: "Section fill",
+          target: [80, 95],
+          watch: [70, 100],
+          action:
+            "Review section offerings with the program coordinator before the next enrollment.",
+        },
+      };
+      const STATUS = {
+        action: { icon: "●", label: "Action needed", rank: 0 },
+        watch: { icon: "▲", label: "Watch", rank: 1 },
+        good: { icon: "✓", label: "On target", rank: 2 },
+      };
+      const COURSE_ALERT_THRESHOLD = 75;
+      const ALERT_LIMIT = 6;
+      const YEAR_ALERT_LIMIT = 2;
+      const LATEST = SEMESTERS.length - 1;
+      const TOUR_KEY = "campuslens_tour_done";
+      const TOUR_STEPS = [
+        [
+          "#filters",
+          "Filters",
+          "Choose a semester and a year level. Everything on the page updates.",
+        ],
+        [
+          "#kpis",
+          "KPI cards",
+          "Five college-level indicators with a status badge and the change from last semester.",
+        ],
+        [
+          "#status-card",
+          "Status by year level",
+          "A quick map of which year levels are on target, on watch, or need action.",
+        ],
+        [
+          "#year-chart",
+          "Pass rate by year level",
+          "Compare year levels against the 85% target. Click a bar to focus on that year.",
+        ],
+        [
+          "#trend-card",
+          "SETE trend",
+          "See how teaching feedback changes over time. The dashed line is the target.",
+        ],
+        [
+          "#alerts-card",
+          "Alerts",
+          "Warnings and suggested actions based on thresholds.",
+        ],
+      ];
+      const yearLevels = Object.entries(SAMPLE_DATA);
+      const semesterFilter = document.querySelector("#semester");
+      const yearFilter = document.querySelector("#year-level");
+      const yearBars = document.querySelector("#year-bars");
+      const statusTable = document.querySelector("#status-table");
+      const courseCard = document.querySelector("#course-card");
+
+      SEMESTERS.forEach((label, index) =>
+        semesterFilter.add(new Option(label, index)),
+      );
+      yearFilter.add(new Option("All year levels", "all"));
+      yearLevels.forEach(([id, data]) =>
+        yearFilter.add(new Option(data.name, id)),
+      );
+      semesterFilter.value = LATEST;
+      const seteTarget = KPI_RULES.sete.target[0];
+      const passTarget = KPI_RULES.pass.target[0];
+      document.querySelector("#trend-note").textContent =
+        `Target ${seteTarget} / 5 · Hollow marker shows the selected semester`;
+      document.querySelector("#pass-note").textContent =
+        `Scale 0–100% · Target ${passTarget}%`;
+      document.querySelector("#courses-note").textContent =
+        `Scale 0–100% · Target ${passTarget}%`;
+
+      const round = (value) =>
+        (Math.sign(value) *
+          Math.round((Math.abs(value) + Number.EPSILON) * 10)) /
+        10;
+      const average = (values) =>
+        values.reduce((sum, value) => sum + value, 0) / values.length;
+      const includes = ([minimum, maximum], value) =>
+        value >= minimum && value <= maximum;
+
+      function statusFor(rule, value) {
+        if (includes(rule.target, value)) return "good";
+        return includes(rule.watch, value) ? "watch" : "action";
+      }
+
+      function badge(status) {
+        const { icon, label } = STATUS[status];
+        return `<span class="badge ${status}"><span aria-hidden="true">${icon}</span>${label}</span>`;
+      }
+
+      function targetText(key, [minimum, maximum]) {
+        if (key === "fill") return `Target ${minimum}–${maximum}%`;
+        return `Target ≥ ${minimum}${key === "sete" ? " / 5" : "%"}`;
+      }
+
+      function deltaText(delta, key) {
+        if (delta === null)
+          return '<span aria-label="No previous semester">—</span>';
+        const unit = key === "sete" ? "score pts" : "pp";
+        if (delta === 0) return `0.0 ${unit} vs prior sem`;
+        const direction = delta > 0 ? "increase" : "decrease";
+        return `<span aria-label="${direction}"><span aria-hidden="true">${delta > 0 ? "▲" : "▼"}</span></span>
+        ${Math.abs(delta).toFixed(1)} ${unit} vs prior sem`;
+      }
+
+      function renderTrend(scores, semester) {
+        const container = document.querySelector("#trend");
+        const { width, height } = container.getBoundingClientRect();
+        if (!width || !height) return;
+        const x = (index) => 48 + index * (width - 92) / 3;
+        const y = (value) => height - 30 - (value - 3.5) / 1.5 * (height - 58);
+        const ticks = [3.5, 4.0, 4.5, 5.0];
+        const target = KPI_RULES.sete.target[0];
+        document.querySelector("#trend").innerHTML = `
+        <svg class="trend" viewBox="0 0 ${width} ${height}" role="group" aria-label="Average SETE scores. ${scores
+          .map(
+            (score, index) =>
+              `${SEMESTERS[index]} ${score.toFixed(1)} out of 5${index === semester ? ", selected" : ""}`,
+          )
+          .join(". ")}">
+          ${ticks
+            .map(
+              (tick) => `
+            <line class="grid-line" x1="32" x2="${width - 20}" y1="${y(tick)}" y2="${y(tick)}"/>
+            <text x="26" y="${y(tick) + 4}" text-anchor="end">${tick.toFixed(1)}</text>`,
+            )
+            .join("")}
+          <line class="target-line" x1="32" x2="${width - 20}" y1="${y(target)}" y2="${y(target)}"/>
+          <polyline class="series" points="${scores.map((score, index) => `${x(index)},${y(score)}`).join(" ")}"/>
+          ${scores
+            .map(
+              (score, index) => `
+            <circle class="trend-hover" tabindex="0" role="img" aria-label="${SEMESTERS[index]}, SETE ${score.toFixed(1)} out of 5" data-help="${yearFilter.selectedOptions[0].textContent} · ${SEMESTERS[index]} · SETE ${score.toFixed(1)} / 5${index === semester ? ' · Selected semester' : ''}" cx="${x(index)}" cy="${y(score)}" r="14"/>
+            <circle class="point${index === semester ? " selected" : ""}" cx="${x(index)}" cy="${y(score)}" r="${index === semester ? 6 : 3.5}"/>
+            <text class="point-label" x="${x(index)}" y="${y(score) - 11}" text-anchor="middle">${score.toFixed(1)}</text>
+            <text x="${x(index)}" y="${height - 9}" text-anchor="middle">${SEMESTER_TICKS[index]}</text>`,
+            )
+            .join("")}
+        </svg>`;
+      }
+
+      function score(year, key, semester) {
+        if (year !== "all") return SAMPLE_DATA[year][key][semester];
+        return round(
+          average(yearLevels.map(([, data]) => data[key][semester])),
+        );
+      }
+
+      function metricsFor(year, semester) {
+        return Object.entries(KPI_RULES).map(([key, rule]) => {
+          const value = score(year, key, semester);
+          const name =
+            key === "pass" && year !== "all" ? rule.heading : rule.name;
+          const display = `${value.toFixed(1)}${key === "sete" ? " / 5" : "%"}`;
+          const delta = semester
+            ? round(value - score(year, key, semester - 1))
+            : null;
+          return {
+            key,
+            rule,
+            name,
+            value,
+            display,
+            delta,
+            status: statusFor(rule, value),
+          };
+        });
+      }
+
+      function coursesFor(year, semester) {
+        const levels =
+          year === "all" ? yearLevels : [[year, SAMPLE_DATA[year]]];
+        return levels
+          .flatMap(([, data]) =>
+            Object.entries(data.courses).map(([code, rate]) => [
+              code,
+              Math.min(100, rate + data.pass[semester] - data.pass[LATEST]),
+            ]),
+          )
+          .sort(
+            ([leftCode, leftRate], [rightCode, rightRate]) =>
+              leftRate - rightRate || leftCode.localeCompare(rightCode),
+          );
+      }
+
+      function passBar(label, value) {
+        return `
+        <span class="bar-label"><span>${label}</span><span class="bar-value">${value}%</span></span>
+        <span class="bar-track" aria-hidden="true">
+          <span class="bar-fill${value < KPI_RULES.pass.watch[0] ? " low" : ""}" style="width:${value}%"></span>
+          <span class="marker" data-label="${passTarget}%" style="left:${passTarget}%"></span>
+        </span>`;
+      }
+
+      function renderStatusTable(rows, selectedYear) {
+        statusTable.innerHTML = `
+        <thead><tr><th scope="col">Year level</th>${Object.values(KPI_RULES)
+          .map((rule) => `<th scope="col">${rule.heading}</th>`)
+          .join("")}</tr></thead>
+        <tbody>${rows
+          .map(
+            ({ year, label, metrics }) => `
+          <tr data-year="${year}" class="${year === selectedYear ? "selected" : ""}">
+            <th scope="row"><button type="button" aria-pressed="${year === selectedYear}" aria-label="Select ${label}">${label}</button></th>
+            ${metrics
+              .map(
+                ({ status, display }) => `
+              <td><span class="cell-status ${status}"><span role="img" aria-label="${STATUS[status].label}">${STATUS[status].icon}</span> ${display}</span></td>`,
+              )
+              .join("")}
+          </tr>`,
+          )
+          .join("")}</tbody>`;
+      }
+
+      function renderAlerts(metrics, courses, rows, allYears) {
+        const alerts = metrics
+          .filter((metric) => metric.status !== "good")
+          .sort(
+            (left, right) =>
+              STATUS[left.status].rank - STATUS[right.status].rank,
+          )
+          .map(
+            ({ rule, name, display, status }) => `
+          <li data-status="${status}"><div class="alert-heading"><strong>${name} · ${display}</strong>${badge(status)}</div>
+            <p class="alert-message">${rule.action}</p></li>`,
+          );
+        const yearAlerts = allYears
+          ? rows
+              .filter((row) => row.year !== "all")
+              .map(({ label, metrics }) => ({
+                label,
+                count: metrics.filter((metric) => metric.status === "action")
+                  .length,
+              }))
+              .filter(({ count }) => count > 0)
+              .sort((left, right) => right.count - left.count)
+              .slice(0, YEAR_ALERT_LIMIT)
+              .map(
+                ({ label, count }) =>
+                  `<li data-status="action"><span class="alert-status-icon" aria-hidden="true">${STATUS.action.icon}</span><strong>${label} has ${count} ${count === 1 ? "KPI" : "KPIs"} needing action.</strong></li>`,
+              )
+          : [];
+        const lowCourses = courses.filter(
+          ([, value]) => value < COURSE_ALERT_THRESHOLD,
+        );
+        const courseAlert = lowCourses.length
+          ? `<li data-status="action"><span class="alert-status-icon" aria-hidden="true">${STATUS.action.icon}</span><strong>Courses under ${COURSE_ALERT_THRESHOLD}% pass rate: ${lowCourses.map(([code]) => code).join(", ")}.</strong></li>`
+          : "";
+        const visible = alerts
+          .slice(
+            0,
+            ALERT_LIMIT - yearAlerts.length - Number(Boolean(courseAlert)),
+          )
+          .concat(yearAlerts, courseAlert)
+          .join("");
+        document.querySelector("#alerts").innerHTML = visible
+          ? `<ul class="alerts">${visible}</ul>`
+          : '<p class="alerts">All indicators are on target.</p>';
+      }
+
+      function render() {
+        const semester = Number(semesterFilter.value);
+        const year = yearFilter.value;
+        const allYears = year === "all";
+        const rows = yearLevels.map(([id, data]) => ({
+          year: id,
+          label: data.name,
+          metrics: metricsFor(id, semester),
+        }));
+        rows.push({
+          year: "all",
+          label: "College",
+          metrics: metricsFor("all", semester),
+        });
+        const { metrics } = rows.find((row) => row.year === year);
+        document.querySelector("#kpis").innerHTML = metrics
+          .map(
+            ({ key, rule, name, value, delta, status }) => `
+        <article class="card metric" data-status="${status}">
+          <h2${rule.definition ? ` title="${rule.definition}"` : ""}>${name}</h2>
+          <p class="value">${value.toFixed(1)}<span class="unit">${key === "sete" ? " / 5" : "%"}</span></p>
+          <p class="target">${targetText(key, rule.target)}</p>
+          ${badge(status)}
+          <p class="delta">${deltaText(delta, key)}</p>
+        </article>`,
+          )
+          .join("");
+
+        yearBars.innerHTML = yearLevels
+          .map(
+            ([id, data]) => `
+        <button class="bar-button" type="button" data-year="${id}" aria-pressed="${id === year}">
+          ${passBar(data.name, data.pass[semester])}
+        </button>`,
+          )
+          .join("");
+        renderTrend(
+          SEMESTERS.map((_, index) => score(year, "sete", index)),
+          semester,
+        );
+        renderStatusTable(rows, year);
+        const courses = coursesFor(year, semester);
+        courseCard.hidden = allYears;
+        document.querySelector("#courses").innerHTML = allYears
+          ? ""
+          : courses
+              .map(([code, value]) => `<div>${passBar(code, value)}</div>`)
+              .join("");
+        renderAlerts(metrics, courses, rows, allYears);
+        addDashboardHelp();
+      }
+
+      function addDashboardHelp() {
+        const definitions = {
+          pass: "Percentage of students who passed their courses.",
+          retention: "Students who re-enrolled next semester divided by students enrolled, multiplied by 100.",
+          sete: "Average Student Evaluation of Teaching Effectiveness score, out of 5. Review alongside response rates and other evidence.",
+          resp: "Percentage of eligible students who completed the teaching evaluation.",
+          fill: "Enrolled students as a percentage of available section capacity. Above 100% means enrollment exceeds capacity."
+        };
+        function help(element, label, description) {
+          if (!element || element.querySelector(".help-button")) return;
+          const button = document.createElement("button");
+          button.type = "button";
+          button.className = "help-button";
+          button.textContent = "?";
+          button.setAttribute("aria-label", "About " + label);
+          button.dataset.help = description;
+          element.removeAttribute("title");
+          element.append(button);
+        }
+        Object.entries(KPI_RULES).forEach(([key, rule], index) => {
+          const range = ([low, high]) => Number.isFinite(high)
+            ? low + " to " + high : low + " or higher";
+          const units = key === "sete" ? " out of 5" : "%";
+          help(document.querySelectorAll(".metric h2")[index], rule.name,
+            definitions[key] + " On target: " + range(rule.target) + units +
+            ". Watch: within " + range(rule.watch) + units +
+            " when outside the target. Action needed: outside both ranges." +
+            (yearFilter.value === "all" ? " College figures are the equally weighted average of the four year levels." : ""));
+          help(document.querySelectorAll(".metric .delta")[index], "semester change",
+            "Change from the previous semester. pp means percentage points; score pts means points on the 5-point SETE scale. Arrows show direction, while the status badge shows whether the target is met. A dash means no earlier semester is available.");
+        });
+        help(semesterFilter.parentElement, "semester filter", "Choose the reporting semester. All KPI cards, charts, and alerts update immediately.");
+        help(yearFilter.parentElement, "year level filter", "Choose a year level to see its indicators and courses to review. All year levels shows college averages.");
+        help(document.querySelector("#year-chart h2"), "pass rate by year level", "Compare year levels with the 85% target. Red bars are below 80%. Select a bar to focus on that year; select it again to return to all year levels.");
+        help(document.querySelector("#trend-card h2"), "SETE trend", "Each point shows an average teaching evaluation score. The dashed line marks the 4.2 target. The larger hollow point marks the selected semester.");
+        help(document.querySelector("#status-card h2"), "status by year level", "Each cell shows a value and its status. Check means on target, triangle means watch, and dot means action needed. Select a row to focus on that year, or College to return to all year levels.");
+        help(document.querySelector("#course-card h2"), "courses to review", "Courses for the selected year are ordered from lowest to highest pass rate. The marker is 85%; red bars are below 80%. Earlier-semester rates are derived sample values.");
+      }
+
+      function selectYear(year) {
+        yearFilter.value = year;
+        render();
+      }
+
+      semesterFilter.addEventListener("change", render);
+      yearFilter.addEventListener("change", render);
+      yearBars.addEventListener("click", (event) => {
+        const bar = event.target.closest("button[data-year]");
+        if (!bar) return;
+        const id = bar.dataset.year;
+        selectYear(yearFilter.value === id ? "all" : id);
+        yearBars.querySelector(`[data-year="${id}"]`).focus();
+      });
+      statusTable.addEventListener("click", (event) => {
+        const row = event.target.closest("tr[data-year]");
+        if (!row) return;
+        const id = row.dataset.year;
+        selectYear(id);
+        statusTable.querySelector(`[data-year="${id}"] button`).focus();
+      });
+      document.querySelector("#back-to-all").addEventListener("click", () => {
+        selectYear("all");
+        yearFilter.focus();
+      });
+      render();
+
+      const signIn = document.querySelector("#sign-in");
+      const dashboard = document.querySelector("#dashboard");
+      const dashboardTitle = document.querySelector("#dashboard-title");
+      const takeTour = document.querySelector("#take-tour");
+      const tour = document.querySelector("#tour");
+      const spotlight = document.querySelector("#spotlight");
+      const tourTip = document.querySelector("#tour-tip");
+      const tourBack = document.querySelector("#tour-back");
+      const tourNext = document.querySelector("#tour-next");
+      const tourSkip = document.querySelector("#tour-skip");
+      let tourSteps = [];
+      let tourIndex = 0;
+      let returnFocus = dashboardTitle;
+      let tourDone = false;
+      try {
+        tourDone = localStorage.getItem(TOUR_KEY) === "1";
+      } catch {
+        // The tour can still run when the browser blocks storage for local files.
+      }
+
+      function positionTour() {
+        if (tour.hidden) return;
+        const { target } = tourSteps[tourIndex];
+        const rect = target.getBoundingClientRect();
+        const width = tour.clientWidth;
+        const height = tour.clientHeight;
+        const left = Math.max(0, rect.left - 6);
+        const top = Math.max(0, rect.top - 6);
+        const right = Math.min(width, rect.right + 6);
+        const bottom = Math.min(height, Math.max(top, rect.bottom + 6));
+        spotlight.style.left = `${left}px`;
+        spotlight.style.top = `${top}px`;
+        spotlight.style.width = `${Math.max(0, right - left)}px`;
+        spotlight.style.height = `${Math.max(0, bottom - top)}px`;
+
+        const gap = 12;
+        const tipWidth = tourTip.offsetWidth;
+        const tipHeight = tourTip.offsetHeight;
+        const below = bottom + gap;
+        const above = top - gap - tipHeight;
+        let tipLeft = left;
+        let tipTop = below;
+        if (below + tipHeight + gap > height) {
+          tipTop = above;
+          if (above < gap && right + tipWidth + gap * 2 <= width) {
+            tipLeft = right + gap;
+            tipTop = top;
+          } else if (above < gap && left >= tipWidth + gap * 2) {
+            tipLeft = left - tipWidth - gap;
+            tipTop = top;
+          } else if (above < gap) {
+            tipTop = height - tipHeight - gap;
+          }
+        }
+        tourTip.style.left = `${Math.max(gap, Math.min(tipLeft, width - tipWidth - gap))}px`;
+        tourTip.style.top = `${Math.max(gap, Math.min(tipTop, height - tipHeight - gap))}px`;
+      }
+
+      function showTourStep() {
+        const { target, title, message } = tourSteps[tourIndex];
+        document.querySelector("#tour-title").textContent = title;
+        document.querySelector("#tour-message").textContent = message;
+        document.querySelector("#tour-progress").textContent =
+          `Step ${tourIndex + 1} of ${tourSteps.length}`;
+        tourBack.disabled = tourIndex === 0;
+        tourNext.textContent =
+          tourIndex === tourSteps.length - 1 ? "Finish" : "Next";
+        target.scrollIntoView({
+          block: target.offsetHeight > window.innerHeight ? "start" : "center",
+        });
+        positionTour();
+        tourTip.focus({ preventScroll: true });
+      }
+
+      function startTour(trigger) {
+        tourSteps = TOUR_STEPS.map(([selector, title, message]) => ({
+          target: document.querySelector(selector),
+          title,
+          message,
+        })).filter(
+          ({ target }) =>
+            target.getClientRects().length > 0 &&
+            getComputedStyle(target).visibility === "visible",
+        );
+        if (!tourSteps.length) return;
+        tourIndex = 0;
+        returnFocus = trigger;
+        tour.hidden = false;
+        dashboard.inert = true;
+        showTourStep();
+      }
+
+      function closeTour() {
+        tourDone = true;
+        try {
+          localStorage.setItem(TOUR_KEY, "1");
+        } catch {
+          // Completion remains available for this page visit.
+        }
+        tour.hidden = true;
+        dashboard.inert = false;
+        returnFocus.focus();
+      }
+
+      function nextTourStep() {
+        if (tourIndex === tourSteps.length - 1) {
+          closeTour();
+          return;
+        }
+        tourIndex++;
+        showTourStep();
+      }
+
+      function previousTourStep() {
+        if (tourIndex === 0) return;
+        tourIndex--;
+        showTourStep();
+      }
+
+      tourNext.addEventListener("click", nextTourStep);
+      tourBack.addEventListener("click", previousTourStep);
+      tourSkip.addEventListener("click", closeTour);
+      takeTour.addEventListener("click", () => startTour(takeTour));
+      window.addEventListener("resize", positionTour);
+      window.addEventListener("scroll", positionTour, { passive: true });
+      tour.addEventListener("keydown", (event) => {
+        switch (event.key) {
+          case "Escape":
+            closeTour();
+            break;
+          case "ArrowRight":
+            nextTourStep();
+            break;
+          case "ArrowLeft":
+            previousTourStep();
+            break;
+          case "Enter":
+            if (event.target.closest("button")) return;
+            nextTourStep();
+            break;
+          case "Tab": {
+            const buttons = [tourBack, tourNext, tourSkip].filter(
+              (button) => !button.disabled,
+            );
+            const index = buttons.indexOf(document.activeElement);
+            const next =
+              index < 0
+                ? event.shiftKey
+                  ? buttons.length - 1
+                  : 0
+                : (index + (event.shiftKey ? -1 : 1) + buttons.length) %
+                  buttons.length;
+            buttons[next].focus();
+            break;
+          }
+          default:
+            return;
+        }
+        event.preventDefault();
+      });
+
+      document
+        .querySelector("#sign-in-form")
+        .addEventListener("submit", (event) => {
+          event.preventDefault();
+          signIn.hidden = true;
+          dashboard.hidden = false;
+          if (tourDone) dashboardTitle.focus();
+          else startTour(dashboardTitle);
+        });
+      document.querySelector("#sign-out").addEventListener("click", () => {
+        dashboard.hidden = true;
+        signIn.hidden = false;
+        document.querySelector("#continue").focus();
+      });
+      const helpTooltip = document.createElement("div");
+      helpTooltip.id = "help-tooltip";
+      helpTooltip.className = "help-tooltip";
+      helpTooltip.setAttribute("role", "tooltip");
+      helpTooltip.hidden = true;
+      document.body.append(helpTooltip);
+      let activeHelp = null;
+      let helpTimer;
+      function hideHelp() {
+        clearTimeout(helpTimer);
+        activeHelp?.removeAttribute("aria-describedby");
+        activeHelp = null;
+        helpTooltip.hidden = true;
+      }
+      function showHelp(button) {
+        hideHelp();
+        activeHelp = button;
+        button.setAttribute("aria-describedby", helpTooltip.id);
+        helpTooltip.textContent = button.dataset.help;
+        helpTooltip.hidden = false;
+        const rect = button.getBoundingClientRect();
+        const left = Math.max(12, Math.min(rect.left, innerWidth - helpTooltip.offsetWidth - 12));
+        const below = rect.bottom + 8;
+        const top = below + helpTooltip.offsetHeight <= innerHeight - 12
+          ? below : Math.max(12, rect.top - helpTooltip.offsetHeight - 8);
+        helpTooltip.style.left = left + "px";
+        helpTooltip.style.top = top + "px";
+      }
+      document.addEventListener("pointerover", event => {
+        const button = event.target.closest(".help-button, .trend-hover");
+        if (button) showHelp(button);
+        if (event.target.closest(".help-tooltip")) clearTimeout(helpTimer);
+      });
+      document.addEventListener("pointerout", event => {
+        if (event.target.closest(".help-button, .trend-hover, .help-tooltip")) {
+          helpTimer = setTimeout(() => {
+            if (document.activeElement !== activeHelp) hideHelp();
+          }, 150);
+        }
+      });
+      document.addEventListener("focusin", event => {
+        const button = event.target.closest(".help-button, .trend-hover");
+        if (button) showHelp(button);
+        else hideHelp();
+      });
+      document.addEventListener("click", event => {
+        const button = event.target.closest(".help-button, .trend-hover");
+        if (button) showHelp(button);
+        else if (!event.target.closest(".help-tooltip")) hideHelp();
+      });
+      document.addEventListener("keydown", event => {
+        if (event.key === "Escape") hideHelp();
+      });
+      window.addEventListener("resize", hideHelp);
+      window.addEventListener("scroll", hideHelp, true);
+      document.addEventListener("change", hideHelp);
+      function redrawTrend() {
+        renderTrend(SEMESTERS.map((_, index) => score(yearFilter.value, "sete", index)), Number(semesterFilter.value));
+      }
+      let trendResizeTimer;
+      function scheduleTrendResize() {
+        clearTimeout(trendResizeTimer);
+        trendResizeTimer = setTimeout(redrawTrend, 60);
+      }
+      const trendObserver = new ResizeObserver(scheduleTrendResize);
+      trendObserver.observe(document.querySelector("#trend"));
+      window.addEventListener("resize", scheduleTrendResize);
+      window.addEventListener("beforeprint", redrawTrend);
+      window.addEventListener("afterprint", redrawTrend);
+    </script>
+  </body>
+</html>
