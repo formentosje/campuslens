@@ -11,30 +11,32 @@
     <style>
       :root {
         color-scheme: light;
-        --brand: #007f86;
-        --brand-dark: #005b65;
-        --ink: #153c46;
-        --mute: #586e75;
-        --bg: #f2f8f8;
+        --brand: #007e91;
+        --brand-dark: #045477;
+        --aqua: #08c3c8;
+        --ice: #def6fb;
+        --ink: #073f5a;
+        --mute: #526f7d;
+        --bg: #f3fbfd;
         --card: #ffffff;
-        --line: #dce9e9;
-        --bar: #247782;
-        --bar-soft: #d5e7e8;
+        --line: #cde7ef;
+        --bar: #00869b;
+        --bar-soft: #d5f0f5;
         --good: #166534;
         --good-bg: #dcfce7;
         --watch: #92400e;
         --watch-bg: #fef3c7;
         --action: #b42318;
         --action-bg: #fee4e2;
-        --table-hover: #f5fafa;
-        --selected: #eaf8f7;
+        --table-hover: #effafd;
+        --selected: #e0f7fa;
         --white-muted: rgb(255 255 255 / 0.85);
         --shadow:
-          0 1px 2px rgb(16 24 40 / 0.06), 0 4px 12px rgb(16 24 40 / 0.04);
+          0 1px 2px rgb(4 84 119 / 0.06), 0 4px 12px rgb(4 84 119 / 0.05);
         --scrim: rgb(17 24 39 / 0.55);
         --heading-font: Poppins, "Segoe UI", system-ui, Arial, sans-serif;
         --body-font: "Open Sans", "Segoe UI", system-ui, Arial, sans-serif;
-        --band: linear-gradient(110deg, var(--brand), var(--brand-dark));
+        --band: linear-gradient(110deg, var(--brand-dark), var(--brand));
       }
       [hidden] {
         display: none !important;
@@ -44,7 +46,9 @@
       }
       body {
         margin: 0;
-        background: var(--bg);
+        background: radial-gradient(ellipse at top left, var(--ice), transparent 55%),
+          radial-gradient(ellipse at bottom right, var(--selected), transparent 55%), var(--bg);
+        background-attachment: fixed;
         color: var(--ink);
         font: 14px/1.5 var(--body-font);
       }
@@ -178,8 +182,9 @@
         justify-items: center;
         gap: 16px;
         padding: 24px;
-        border-top: 6px solid color-mix(in srgb, var(--brand) 25%, transparent);
-        background: linear-gradient(135deg, #f8fafc, var(--selected));
+        border-top: 6px solid var(--aqua);
+        background: radial-gradient(ellipse at top left, var(--ice), transparent 60%),
+          linear-gradient(135deg, var(--bg), var(--card) 55%, var(--selected));
       }
       .sign-in .card {
         display: grid;
@@ -199,7 +204,7 @@
         isolation: isolate;
         overflow: hidden;
         border-radius: 12px;
-        background: linear-gradient(160deg, var(--brand), var(--brand-dark));
+        background: linear-gradient(155deg, var(--brand-dark), var(--brand));
         color: var(--card);
       }
       .sign-in-message::before,
@@ -945,7 +950,20 @@
       .trend-hover { fill: transparent; cursor: help; }
       .trend-hover:focus-visible { outline: none; stroke: var(--ink); stroke-width: 1.5; }
       #trend .point, #trend .point-label { pointer-events: none; }
+      .sign-in h1 span { text-decoration-color: var(--aqua); }
+      .sign-in-benefits li::before { background: var(--aqua); }
+      .sign-in-message::after { border-color: var(--aqua); }
+      .sign-in-role { border-left-color: var(--aqua); }
+      @media print {
+        body { background: var(--card); }
+      }
       img.logo { object-fit: contain; border-radius: 10px; background: var(--card); }
+      .top img.logo {
+        padding: 4px;
+        background: rgb(255 255 255 / .85);
+        border: 1px solid rgb(255 255 255 / .6);
+        box-shadow: 0 0 0 4px rgb(255 255 255 / .16);
+      }
     </style>
   </head>
   <body>
